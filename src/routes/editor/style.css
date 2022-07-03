@@ -1,0 +1,72 @@
+:root {
+    --slide: 50%;
+    --scaled-width: 100%;
+}
+
+.editor {
+    position: relative;
+    font-size: var(--slide);
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    background: black;
+}
+
+.slider {
+    width: 5px;
+    background: black;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--slide);
+    cursor: col-resize;
+}
+
+.slider:after {
+    content: '';
+    position: absolute;
+    width: 48px;
+    height: 100%;
+    left: -24px;
+}
+
+.left {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    bottom: 0;
+    clip-path: polygon(0% 0%, var(--slide) 0%, var(--slide) 100%, 0% 100%);
+}
+
+.right {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    clip-path: polygon(var(--slide) 0%, 100% 0%, 100% 100%, var(--slide) 100%);
+}
+
+.destination {
+    font-size: calc(100vw / var(--scaled-width));
+    width: 1em;
+    height: 1em;
+}
+
+.controls {
+    padding: 24px;
+    font-size: 14px;
+    color: white;
+    position: absolute;
+    bottom: 32px;
+    right: 32px;
+    width: 200px;
+    background: darkblue;
+    border-radius: 16px;
+    display: flex;
+    gap: 4px;
+    flex-direction: column;
+}
