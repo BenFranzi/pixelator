@@ -2,6 +2,9 @@ import {FunctionalComponent, h} from 'preact';
 import style from './style.css';
 import {useRef, useEffect, MutableRef, useState} from 'preact/hooks';
 import convertToBoxShadow, {fileToImage, urlToImage} from "../../utils/convert-to-box-shadow";
+import workerWrapper from '../../utils/worker-wrapper';
+import WorkerBuilder from '../../utils/worker-builder';
+
 
 const Home: FunctionalComponent = () => {
   const [image, setImage] = useState<HTMLImageElement>();
@@ -13,6 +16,7 @@ const Home: FunctionalComponent = () => {
   const destinationRef = useRef<HTMLDivElement>(null);
   const isSliding = useRef(false);
 
+  const myWorker = new WorkerBuilder(workerWrapper);
 
   async function initial(): Promise<void> {
     const loaded = await urlToImage('assets/lorikeet.jpg');
@@ -22,6 +26,8 @@ const Home: FunctionalComponent = () => {
   useEffect(() => {
     initial();
   }, [])
+
+
 
 
   async function convert(): Promise<void> {

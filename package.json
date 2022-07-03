@@ -10,6 +10,10 @@
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'"
   },
   "eslintConfig": {
+    "globals": {
+      "WorkerGlobalScope": true,
+      "OffscreenCanvas": true
+    },
     "parser": "@typescript-eslint/parser",
     "extends": [
       "preact",

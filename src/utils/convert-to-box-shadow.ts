@@ -18,11 +18,6 @@ export async function fileToImage(file: any): Promise<HTMLImageElement> {
   });
 }
 
-function supportsOffscreenCanvas(): boolean {
-  return false;
-  // return typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope && typeof OffscreenCanvas !== 'undefined';
-}
-
 interface Location {
   x: number;
   y: number;
