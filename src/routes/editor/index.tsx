@@ -4,6 +4,8 @@ import {useRef, useEffect, MutableRef, useState} from 'preact/hooks';
 import convertToBoxShadow, {fileToImage, urlToImage} from "../../utils/convert-to-box-shadow";
 
 const Home: FunctionalComponent = () => {
+  const [copyTextTimeoutId, setCopyTextTimeoutId] = useState<number|null>(null);
+
   const [image, setImage] = useState<HTMLImageElement>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [pixelsPerPixel, setPixelsPerPixel] = useState<number>(8);
@@ -12,7 +14,6 @@ const Home: FunctionalComponent = () => {
   const sliderRef = useRef<HTMLDivElement>(null);
   const destinationRef = useRef<HTMLDivElement>(null);
   const isSliding = useRef(false);
-
 
   async function initial(): Promise<void> {
     const loaded = await urlToImage('assets/lorikeet.jpg');
@@ -82,6 +83,19 @@ const Home: FunctionalComponent = () => {
     convert();
   }
 
+  const onCopy = async () => {
+    if (copyTextTimeoutId) {
+      clearTimeout(copyTextTimeoutId);
+    }
+
+    await navigator.clipboard.writeText(destinationRef.current?.outerHTML || '');
+
+    setCopyTextTimeoutId(
+      // @ts-ignore
+      setTimeout(() => setCopyTextTimeoutId(null), 1000),
+    );
+  }
+
   return (
     <div
       class={style.editor}
@@ -93,7 +107,11 @@ const Home: FunctionalComponent = () => {
     >
       <img src={image?.src} class={style.left} alt=""/>
       <div class={style.right}>
-        <div ref={destinationRef} id="hello" class={style.destination}/>
+        <div ref={destinationRef} style={{
+          fontSize: 'calc(100vw / var(--scaled-width))',
+          width: '1em',
+          height: '1em',
+        }}/>
       </div>
       <div
         class={style.slider}
@@ -127,6 +145,7 @@ const Home: FunctionalComponent = () => {
           />
           <p>{isLoading && 'Loading...'}</p>
         </div>
+        <button onClick={onCopy}>{copyTextTimeoutId ? 'copied!' : 'copy'}</button>
       </div>
     </div>
   );

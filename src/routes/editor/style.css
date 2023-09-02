@@ -50,12 +50,6 @@
     clip-path: polygon(var(--slide) 0%, 100% 0%, 100% 100%, var(--slide) 100%);
 }
 
-.destination {
-    font-size: calc(100vw / var(--scaled-width));
-    width: 1em;
-    height: 1em;
-}
-
 .controls {
     padding: 24px;
     font-size: 14px;

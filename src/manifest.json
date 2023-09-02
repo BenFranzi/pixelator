@@ -1,6 +1,6 @@
 {
-  "name": "deecomp",
-  "short_name": "deecomp",
+  "name": "pixelator",
+  "short_name": "pixelator",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
