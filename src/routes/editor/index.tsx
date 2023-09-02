@@ -30,10 +30,11 @@ const Home: FunctionalComponent = () => {
       return;
     }
 
-    const {boxShadow, width} = await convertToBoxShadow(image, pixelsPerPixel);
+    const {boxShadow, origin, width} = await convertToBoxShadow(image, pixelsPerPixel);
 
+    destinationRef.current?.style?.setProperty("background", origin);
+    destinationRef.current?.style?.setProperty("font-size", `calc(100vw / ${width})`);
     destinationRef.current?.style?.setProperty("box-shadow", boxShadow);
-    editorRef.current?.style?.setProperty("--scaled-width", ` ${width}`);
     setIsLoading(false);
   }
 
@@ -88,7 +89,9 @@ const Home: FunctionalComponent = () => {
       clearTimeout(copyTextTimeoutId);
     }
 
-    await navigator.clipboard.writeText(destinationRef.current?.outerHTML || '');
+    const resets = `<style>body { margin: 0 }</style>`;
+
+    await navigator.clipboard.writeText(`${resets}${destinationRef.current?.outerHTML}`);
 
     setCopyTextTimeoutId(
       // @ts-ignore
@@ -108,7 +111,6 @@ const Home: FunctionalComponent = () => {
       <img src={image?.src} class={style.left} alt=""/>
       <div class={style.right}>
         <div ref={destinationRef} style={{
-          fontSize: 'calc(100vw / var(--scaled-width))',
           width: '1em',
           height: '1em',
         }}/>

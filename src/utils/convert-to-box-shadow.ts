@@ -40,9 +40,12 @@ function bufferToBoxShadow({ x, y }: Location, { r, g, b, a }: Color) {
   return `, ${x}em ${y}em rgba(${r}, ${g}, ${b}, ${a})`;
 }
 
-export function convertImageDataToBoxShadow(imageData: ImageData, width: number): string {
+export function convertImageDataToBoxShadow(imageData: ImageData, width: number): { origin: string, boxShadow: string } {
   let boxShadow = "";
-  for (let pixel = 0; pixel < imageData.data.length / 4.0; pixel++) {
+
+  const origin = `rgba(${imageData.data[0]}, ${imageData.data[1]}, ${imageData.data[2]}, ${imageData.data[3] / 255})`;
+
+  for (let pixel = 1; pixel < imageData.data.length / 4.0; pixel++) {
     const position = pixel * 4;
 
     boxShadow += bufferToBoxShadow(
@@ -59,10 +62,11 @@ export function convertImageDataToBoxShadow(imageData: ImageData, width: number)
     );
   }
 
-  return boxShadow.substring(1);
+
+  return { origin, boxShadow: boxShadow.substring(1) };
 }
 
-export default async function convertToBoxShadow(image: any, pixelsPerPixel = 1): Promise<{ boxShadow: string; width: number }> {
+export default async function convertToBoxShadow(image: any, pixelsPerPixel = 1): Promise<{ boxShadow: string; origin: string, width: number }> {
   const { naturalWidth, naturalHeight } = image;
 
   const width = Math.floor(naturalWidth / pixelsPerPixel);
@@ -82,5 +86,5 @@ export default async function convertToBoxShadow(image: any, pixelsPerPixel = 1)
   const imageData = ctx.getImageData(0, 0, width, height);
 
 
-  return {boxShadow: convertImageDataToBoxShadow(imageData, width), width };
+  return { ...convertImageDataToBoxShadow(imageData, width), width };
 }
